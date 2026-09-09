@@ -2,6 +2,7 @@
 
 namespace Database\Seeders;
 
+use App\Models\SiteSetting;
 use App\Models\User;
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
@@ -15,11 +16,22 @@ class DatabaseSeeder extends Seeder
      */
     public function run(): void
     {
-        // User::factory(10)->create();
+        // İlk ve tek admin hesabı: dışarıdan kayıt formuyla bu role verilemez,
+        // sadece seeder üzerinden (veya DataGrip'ten manuel) atanır.
+        User::query()->updateOrCreate(
+            ['email' => 'admin@admin.com'],
+            [
+                'name' => 'Admin',
+                'password' => 'password',
+                'email_verified_at' => now(),
+                'role' => 'admin',
+            ]
+        );
 
-        User::factory()->create([
-            'name' => 'Test User',
-            'email' => 'test@example.com',
+        SiteSetting::setMany([
+            'linkedin_url' => null,
+            'github_url' => null,
+            'twitter_url' => null,
         ]);
     }
 }

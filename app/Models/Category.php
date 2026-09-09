@@ -3,13 +3,20 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
-use ılluminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
+
 class Category extends Model
 {
-    protected $fillable = ['name', 'slug'];
+    protected $fillable = [
+        'name',
+        'slug',
+    ];
 
-    public function posts(): HasMany
+    /**
+     * Bu kategoriye ait yazılar (category_post pivot tablosu üzerinden).
+     */
+    public function posts(): BelongsToMany
     {
-        return $this->hasMany(Post::class);
+        return $this->belongsToMany(Post::class, 'category_post')->withTimestamps();
     }
 }
